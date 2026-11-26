@@ -1,0 +1,12 @@
+.git
+.pytest_cache
+__pycache__
+*.pyc
+.venv
+data
+*.db
+*.db-wal
+*.db-shm
+demo/coverage_reports
+tests
+README.md

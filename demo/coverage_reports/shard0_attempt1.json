@@ -1,0 +1,22 @@
+{
+  "files": {
+    "src/calc.py": {
+      "executed_lines": [1, 2, 3, 5, 6, 7],
+      "missing_lines": [4],
+      "excluded_lines": [],
+      "executed_branches": [[3, 5], [6, 7]],
+      "missing_branches": [[3, 4]],
+      "summary": {
+        "covered_lines": 6,
+        "num_statements": 7,
+        "percent_covered": 75.0,
+        "missing_lines": 1,
+        "num_branches": 3,
+        "covered_branches": 2
+      }
+    }
+  },
+  "totals": {
+    "percent_covered": 75.0
+  }
+}

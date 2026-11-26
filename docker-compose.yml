@@ -1,0 +1,20 @@
+services:
+  coverage-collector:
+    build: .
+    image: coverage-collector:latest
+    container_name: coverage-collector
+    ports:
+      - "8000:8000"
+    environment:
+      COVERAGE_DB_PATH: /data/coverage.db
+      COVERAGE_BUSY_TIMEOUT_MS: "5000"
+    volumes:
+      - coverage-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  coverage-data:

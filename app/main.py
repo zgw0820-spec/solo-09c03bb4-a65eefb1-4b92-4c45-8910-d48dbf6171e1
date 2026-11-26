@@ -29,10 +29,10 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(
     title="Coverage Collector",
-    version="1.0.0",
+    version="2.0.0",
     description=(
         "接收 coverage.py JSON 报告的分片覆盖收集服务。"
-        "支持按尝试号换报、事务化重算与逐文件未覆盖查询。"
+        "支持按尝试号换报、增量缺口维护与逐文件未覆盖直查。"
     ),
     lifespan=lifespan,
 )

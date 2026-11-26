@@ -4,7 +4,7 @@
   "files": [
     {
       "path": "src/calc.py",
-      "executable_lines": [1, 2, 3, 4, 5, 6, 7],
+      "executable_lines": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       "branches": [[3, 4], [3, 5], [6, 7]]
     },
     {

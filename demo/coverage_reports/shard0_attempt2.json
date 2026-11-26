@@ -1,19 +1,19 @@
 {
   "files": {
     "src/calc.py": {
-      "executed_lines": [1, 2, 3, 4, 5, 6],
-      "missing_lines": [7],
+      "executed_lines": [1, 2, 3, 4, 5, 6, 8, 9],
+      "missing_lines": [7, 10],
       "excluded_lines": [],
       "executed_branches": [[3, 4], [6, 7]],
       "missing_branches": [[3, 5]],
       "summary": {
-        "covered_lines": 6,
-        "num_statements": 7,
-        "percent_covered": 72.0
+        "covered_lines": 8,
+        "num_statements": 10,
+        "percent_covered": 78.0
       }
     }
   },
   "totals": {
-    "percent_covered": 72.0
+    "percent_covered": 78.0
   }
 }

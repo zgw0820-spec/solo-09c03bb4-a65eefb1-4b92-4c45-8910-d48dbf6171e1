@@ -9,4 +9,5 @@ data
 *.db-shm
 demo/coverage_reports
 tests
+bench
 README.md

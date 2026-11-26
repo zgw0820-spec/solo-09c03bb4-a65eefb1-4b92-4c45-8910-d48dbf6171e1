@@ -182,7 +182,8 @@ def test_reads_see_complete_old_version_during_replacement(client):
 
     other = _new_conn()
     try:
-        # 模拟换报进行中：拿到写锁并完成改写但先不提交。
+        # 模拟换报进行中：在另一连接上完成新模型的完整改写（明细 + 引用计数
+        # + 缺口 + 收齐/版本），但先不提交。
         other.execute("BEGIN IMMEDIATE")
         other.execute(
             "DELETE FROM coverage_rows WHERE build_id = ? AND shard = ?",
@@ -203,9 +204,32 @@ def test_reads_see_complete_old_version_during_replacement(client):
                 ]
             ],
         )
+        other.execute("UPDATE reports SET attempt = 2, received_at = datetime('now') "
+                      "WHERE build_id = 'b1' AND shard = 0")
+        # 缺口随新命中翻转：行 4 获得命中、行 7 失去最后命中。
         other.execute(
-            "UPDATE reports SET attempt = 2, received_at = datetime('now') "
-            "WHERE build_id = 'b1' AND shard = 0"
+            "DELETE FROM uncovered_gaps "
+            "WHERE build_id='b1' AND path='src/calc.py' AND kind='line' AND line_no=4"
+        )
+        other.execute(
+            "INSERT OR IGNORE INTO uncovered_gaps "
+            "(build_id, path, kind, line_no, branch_no) "
+            "VALUES ('b1', 'src/calc.py', 'line', 7, NULL)"
+        )
+        # 分支缺口同步翻转：3->4 获得命中消失，3->5 失去最后命中变回缺口。
+        other.execute(
+            "DELETE FROM uncovered_gaps "
+            "WHERE build_id='b1' AND path='src/calc.py' AND kind='branch' "
+            "AND line_no=3 AND branch_no=4"
+        )
+        other.execute(
+            "INSERT OR IGNORE INTO uncovered_gaps "
+            "(build_id, path, kind, line_no, branch_no) "
+            "VALUES ('b1', 'src/calc.py', 'branch', 3, 5)"
+        )
+        other.execute(
+            "UPDATE builds SET coverage_version = coverage_version + 1 "
+            "WHERE build_id = 'b1'"
         )
 
         # 事务挂起期间，主连接反复读到的都是完整旧版。
